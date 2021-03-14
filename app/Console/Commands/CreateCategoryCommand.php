@@ -8,7 +8,7 @@ use App\Services\CategoryService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class CreateProductCommand extends Command
+class CreateCategoryCommand extends Command
 {
     /**
      * Product service
