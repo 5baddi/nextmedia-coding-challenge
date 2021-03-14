@@ -11,6 +11,16 @@ class Category extends Model
     use HasFactory, HasUuidRouteKey;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'parent_category_id'
+    ];
+
+    /**
      * Get parent category
      */
     public function parent()
