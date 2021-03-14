@@ -22,6 +22,8 @@ class Category extends Model
 
     /**
      * Get parent category
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function parent()
     {
@@ -30,6 +32,8 @@ class Category extends Model
 
     /**
      * Get category products
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products()
     {

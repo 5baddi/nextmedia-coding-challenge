@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -30,6 +31,16 @@ Route::prefix('v1')->group(function(){
     Route::prefix('categories')->group(function(){
         // Store new category
         Route::post('/', [CategoryController::class, 'store']);
-        Route::get('/{category}', [CategoryController::class, 'destroy']);
+        // Delete exists category
+        Route::delete('/{category}', [CategoryController::class, 'destroy']);
+    });
+    
+    // product routes
+    Route::prefix('products')->group(function(){
+        Route::get('/', [ProductController::class, 'index']);
+        // Store new product
+        Route::post('/', [ProductController::class, 'store']);
+        // Delete exists product
+        Route::delete('/{product}', [ProductController::class, 'destroy']);
     });
 });

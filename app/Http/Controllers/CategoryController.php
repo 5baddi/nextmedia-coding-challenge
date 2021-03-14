@@ -45,9 +45,9 @@ class CategoryController extends Controller
 
         try{
             // Save new category
-            $this->categoryService->create($data);
+            $createdCategory = $this->categoryService->create($data);
 
-            return response()->success("Category created successfully.");
+            return response()->success("Category created successfully.", $createdCategory);
         }catch(InvalidArgumentException $ex){
             return response()->error(
                 "Something going wrong! can't create new category",
@@ -67,7 +67,7 @@ class CategoryController extends Controller
      *
      * @param \App\Models\Category $category
      * @return \Illuminate\Http\Response
-     * @throws \InvalidArgumentException|\Exception
+     * @throws \Exception
      */
     public function destroy(Category $category)
     {

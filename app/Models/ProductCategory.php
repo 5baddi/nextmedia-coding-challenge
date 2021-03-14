@@ -26,19 +26,21 @@ class ProductCategory extends Model
     /**
      * Disable auto incrementing
      * 
-     * @var boolean
+     * @var bool
      */
     public $incrementing = false;
 
     /**
      * Disable timestamps
      * 
-     * @var boolean
+     * @var bool
      */
     public $timestamps = false;
 
     /**
      * Get the product
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product()
     {
@@ -47,6 +49,8 @@ class ProductCategory extends Model
 
     /**
      * Get the category of this product
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function category()
     {
