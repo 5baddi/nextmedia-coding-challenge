@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "ryancco/laravel-uuid-models": "^1.0"
+        "ryancco/laravel-uuid-models": "^1.0",
+        "torann/laravel-repository": "^0.6.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
