@@ -78,6 +78,6 @@ class CategoryService
         // Commit DB transaction
         DB::commit();
 
-        return $deleted;
+        return $deleted ?? false;
     }
 }
