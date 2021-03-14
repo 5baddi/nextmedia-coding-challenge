@@ -21,9 +21,15 @@ use App\Http\Controllers\CategoryController;
 
 // API routes version one
 Route::prefix('v1')->group(function(){
+    // API status
+    Route::get('/', function(){
+        return 'API is ' . (config('app.debug') ? 'online' : 'offline');
+    });
+
     // Category routes
     Route::prefix('categories')->group(function(){
         // Store new category
         Route::post('/', [CategoryController::class, 'store']);
+        Route::get('/{category}', [CategoryController::class, 'destroy']);
     });
 });

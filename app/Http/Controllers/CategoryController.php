@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 use App\Services\CategoryService;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
@@ -25,10 +29,11 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a new category.
+     * Store a new category
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \InvalidArgumentException|\Exception
      */
     public function store(Request $request)
     {
@@ -40,9 +45,9 @@ class CategoryController extends Controller
 
         try{
             // Save new category
-            $categoryService->create($data);
+            $this->categoryService->create($data);
 
-            return response()->success("{$data['name']} created successfully.");
+            return response()->success("Category created successfully.");
         }catch(InvalidArgumentException $ex){
             return response()->error(
                 "Something going wrong! can't create new category",
@@ -52,6 +57,28 @@ class CategoryController extends Controller
         }catch(Exception $ex){
             return response()->error(
                 "Something going wrong! can't create new category",
+                [$ex->getMessage()]
+            );
+        }
+    }
+
+    /**
+     * Delete category
+     *
+     * @param \App\Models\Category $category
+     * @return \Illuminate\Http\Response
+     * @throws \InvalidArgumentException|\Exception
+     */
+    public function destroy(Category $category)
+    {
+        try{
+            // Delete targeted category
+            $this->categoryService->delete($category);
+
+            return response()->success("Category deleted successfully.", null, Response::HTTP_NO_CONTENT);
+        }catch(Exception $ex){
+            return response()->error(
+                "Something going wrong! can't delete the category",
                 [$ex->getMessage()]
             );
         }
