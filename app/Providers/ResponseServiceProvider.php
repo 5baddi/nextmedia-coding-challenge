@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
 
 class ResponseServiceProvider extends ServiceProvider
@@ -21,7 +22,7 @@ class ResponseServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(ResponseFactory $factory)
     {
         // Success response
         $factory->macro('success', function($message = '', $data = [], $httpStatusCode = 200) use ($factory){
