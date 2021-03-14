@@ -8,7 +8,7 @@ use App\Services\ProductService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class CreateProductCommand extends Command
+class DeleteProductCommand extends Command
 {
     /**
      * Product service
