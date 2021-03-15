@@ -47,7 +47,7 @@ class CategoryController extends Controller
             // Save new category
             $createdCategory = $this->categoryService->create($data);
 
-            return response()->success("Category created successfully.", $createdCategory);
+            return response()->success("Category created successfully.", $createdCategory, Response::HTTP_CREATED);
         }catch(InvalidArgumentException $ex){
             return response()->error(
                 "Something going wrong! can't create new category",

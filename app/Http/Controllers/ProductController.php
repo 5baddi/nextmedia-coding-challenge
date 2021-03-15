@@ -62,7 +62,7 @@ class ProductController extends Controller
             // Save new product
             $createdProduct = $this->productService->create($data);
 
-            return response()->success("Product created successfully.", $createdProduct);
+            return response()->success("Product created successfully.", $createdProduct, Response::HTTP_CREATED);
         }catch(InvalidArgumentException $ex){
             return response()->error(
                 "Something going wrong! can't create new product",
