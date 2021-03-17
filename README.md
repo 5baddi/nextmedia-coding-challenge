@@ -39,4 +39,5 @@ Then start your server:
 php artisan serve
 ```
 You can now access the server at http://localhost:8000
+
 To see all defined routes and corresponding controllers methods use `php artisan route:list` console command
