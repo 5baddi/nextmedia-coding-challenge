@@ -37,7 +37,7 @@ php artisan storage:link
 Run the database migrations (**Set the database connection in .env before migrating**)
 
 ```
- php artisan migrate
+php artisan migrate
 ```
 
 Then start your server:
