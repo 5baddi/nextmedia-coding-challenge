@@ -28,6 +28,12 @@ Run the following command to generate your app key:
 php artisan key:generate
 ```
 
+Create the symbolic link:
+
+```
+php artisan storage:link
+```
+
 Run the database migrations (**Set the database connection in .env before migrating**)
 
 ```
