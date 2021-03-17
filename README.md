@@ -7,7 +7,7 @@
 
 ## Getting started
 
-### Install dependencies
+### Dependencies installation
 
 *(Assuming you've [installed Composer](https://getcomposer.org/doc/00-intro.md))*
 
@@ -17,6 +17,8 @@ Fork this repository, then clone your fork, and run this in your newly created d
 composer install
 ```
 
+### Project configuration
+
 Next you need to make a copy of the `.env.example` file and rename it to `.env` inside your project root.
 
 Run the following command to generate your app key:
@@ -25,10 +27,16 @@ Run the following command to generate your app key:
 php artisan key:generate
 ```
 
+Run the database migrations (**Set the database connection in .env before migrating**)
+
+```
+ php artisan migrate
+```
+
 Then start your server:
 
 ```
 php artisan serve
 ```
-
+You can now access the server at http://localhost:8000
 To see all defined routes and corresponding controllers methods use `php artisan route:list` console command
