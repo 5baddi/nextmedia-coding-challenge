@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\Product;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use App\Services\ProductService;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
@@ -35,10 +34,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return response()->success(
-            "All products retrieved successfully.",
-            $this->productService->all()
-        );
+        return response()->json($this->productService->all());
     }
 
      /**
@@ -46,7 +42,7 @@ class ProductController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
-     * @throws \InvalidArgumentException|\Exception
+     * @throws \ValidationException|\Exception
      */
     public function store(Request $request)
     {
@@ -59,20 +55,24 @@ class ProductController extends Controller
         ]);
 
         try{
-            // Save new product
             $createdProduct = $this->productService->create($data);
 
-            return response()->success("Product created successfully.", $createdProduct, Response::HTTP_CREATED);
-        }catch(InvalidArgumentException $ex){
-            return response()->error(
-                "Something going wrong! can't create new product",
-                [$ex->getMessage()],
-                422
+            return response()->json($createdProduct, Response::HTTP_CREATED);
+        }catch(ValidationException $ex){
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new product',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }catch(Exception $ex){
-            return response()->error(
-                "Something going wrong! can't create new product",
-                [$ex->getMessage()]
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new product',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -80,21 +80,23 @@ class ProductController extends Controller
      /**
      * Delete product
      *
-     * @param \App\Models\Product $product
+     * @param int $id Id
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Product $product)
+    public function destroy(int $id)
     {
         try{
-            // Delete targeted product
-            $this->productService->delete($product);
+            $this->productService->delete($id);
 
-            return response()->success("Product deleted successfully.", null, Response::HTTP_NO_CONTENT);
+            return response()->json([], Response::HTTP_NO_CONTENT);
         }catch(Exception $ex){
-            return response()->error(
-                "Something going wrong! can't delete the product",
-                [$ex->getMessage()]
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new category',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }

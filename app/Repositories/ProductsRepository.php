@@ -49,6 +49,17 @@ class ProductsRepository implements RepositoryInterface
     }
 
     /**
+    * Find row by name key
+    *
+    * @param string $name Name
+    * @return \App\Models\Product|null
+    */
+    public function findByName(string $name): ?Product
+    {
+        return $this->model::where('name', $name)->first();
+    }
+
+    /**
      * Insert new row
      * 
      * @param array $attributes Attributes

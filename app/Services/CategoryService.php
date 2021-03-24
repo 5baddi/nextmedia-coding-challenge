@@ -73,7 +73,7 @@ class CategoryService
      * @return bool
      * @throws \Exception
      */
-    public function delete(int $id)
+    public function delete(int $id): bool
     {
         try{
             DB::beginTransaction();
