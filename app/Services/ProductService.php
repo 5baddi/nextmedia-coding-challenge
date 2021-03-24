@@ -7,7 +7,7 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductsRepository;
 use Illuminate\Validation\ValidationException;
 
@@ -23,7 +23,7 @@ class ProductService
     /**
      * Validator package
      *
-     * @var \Illuminate\Validation\Validator
+     * @var \Illuminate\Support\Facades\Validator
      */
     protected $validator;
     
@@ -76,9 +76,7 @@ class ProductService
     public function create(array $data)
     {
         // Validate data
-        $validator = $this->validator
-                        ->setData($data)
-                        ->setRules([
+        $validator = $this->validator::make($data, [
                             'name'          =>  'required|max:255',
                             'description'   =>  'nullable|string',
                             'price'         =>  'required|numeric',

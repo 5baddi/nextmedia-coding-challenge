@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Ryancco\HasUuidRouteKey\HasUuidRouteKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory, HasUuidRouteKey;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

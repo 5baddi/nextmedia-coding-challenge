@@ -22,7 +22,7 @@ class CreateCategoryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'create:category';
+    protected $signature = 'category:create';
 
     /**
      * The console command description.

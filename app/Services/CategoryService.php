@@ -7,7 +7,7 @@ use App\Models\Category;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Repositories\CategoriesRepository;
 use Illuminate\Validation\ValidationException;
 
@@ -23,7 +23,7 @@ class CategoryService
     /**
      * Validator package
      *
-     * @var \Illuminate\Validation\Validator
+     * @var \Illuminate\Support\Facades\Validator
      */
     protected $validator;
 
@@ -57,12 +57,10 @@ class CategoryService
      */
     public function create(array $data)
     {
-        $validator = $this->validator
-                        ->setData($data)
-                        ->setRules([
-                            'name'                  =>  'required|max:255',
-                            'parent_category_id'    =>  'nullable|exists:categories,id',
-                        ]);
+        $validator = $this->validator::make($data, [
+            'name'                  =>  'required|max:255',
+            'parent_category_id'    =>  'nullable|exists:categories,id',
+        ]);
 
         if($validator->fails()){
             throw new ValidationException($validator->errors()->all());

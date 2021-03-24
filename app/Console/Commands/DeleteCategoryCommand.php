@@ -22,7 +22,7 @@ class DeleteCategoryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'delete:category';
+    protected $signature = 'category:delete';
 
     /**
      * The console command description.

@@ -22,7 +22,7 @@ class CreateProductCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'create:product';
+    protected $signature = 'product:create';
 
     /**
      * The console command description.

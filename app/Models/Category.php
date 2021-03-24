@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Ryancco\HasUuidRouteKey\HasUuidRouteKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
-    use HasFactory, HasUuidRouteKey;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
