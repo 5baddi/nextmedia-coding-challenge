@@ -30,17 +30,17 @@ Route::prefix('v1')->group(function(){
     // Category routes
     Route::prefix('categories')->group(function(){
         // Store new category
-        Route::post('/', [CategoryController::class, 'store']);
+        Route::post('/', [CategoryController::class, 'store'])->name('api.category.store');
         // Delete exists category
-        Route::delete('/{category}', [CategoryController::class, 'destroy']);
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->where('id', '')->name('api.category.delete');
     });
     
     // product routes
     Route::prefix('products')->group(function(){
-        Route::get('/', [ProductController::class, 'index']);
+        Route::get('/', [ProductController::class, 'index'])->name('api.product.fetch');
         // Store new product
-        Route::post('/', [ProductController::class, 'store']);
+        Route::post('/', [ProductController::class, 'store'])->name('api.product.store');
         // Delete exists product
-        Route::delete('/{product}', [ProductController::class, 'destroy']);
+        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('api.product.delete');
     });
 });

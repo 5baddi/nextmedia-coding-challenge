@@ -65,15 +65,14 @@ class CategoryController extends Controller
     /**
      * Delete category
      *
-     * @param \App\Models\Category $category
+     * @param int $id Id
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Category $category)
+    public function destroy(int $id)
     {
         try{
-            // Delete targeted category
-            $this->categoryService->delete($category);
+            $this->categoryService->delete($id);
 
             return response()->success("Category deleted successfully.", null, Response::HTTP_NO_CONTENT);
         }catch(Exception $ex){

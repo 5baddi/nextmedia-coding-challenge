@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\CategoriesRepository;
+use Illuminate\Validation\ValidationException;
 
 class CategoryService
 {
@@ -40,16 +41,6 @@ class CategoryService
     }
 
     /**
-     * Retrieve list of categories
-     * 
-     * @return array
-     */
-    public function list()
-    {
-        return $this->categoryRepository->all(['id', 'name'])->toArray();
-    }
-
-    /**
      * Create new category
      *
      * @param array $data
@@ -58,83 +49,49 @@ class CategoryService
      */
     public function create(array $data)
     {
-        // Validate data
         $validator = Validator::make($data, [
-            'name'                  =>  'required|unique:categories|max:255',
+            'name'                  =>  'required|max:255',
             'parent_category_id'    =>  'nullable|exists:categories,id',
         ]);
 
-        // Throw exception if validation fails
-        if($validator->fails())
-            throw new InvalidArgumentException($validator->errors()->first());
+        if($validator->fails()){
+            throw new ValidationException($validator->errors()->all());
+        }
+
+        $existsCategory = $this->categoryRepository->findByName($data['name']);
+        if($existsCategory instanceof Category){
+            throw new Exception("Category already exists with name {$data['name']}");
+        }
 
         return $this->categoryRepository->create($data);
     }
 
     /**
-     * Delete category
+     * Delete category by id
      *
-     * @param \App\Models\Category $category
+     * @param int $id
      * @return bool
      * @throws \Exception
      */
-    public function delete(Category $category)
+    public function delete(int $id)
     {
-        // Start DB transaction
-        DB::beginTransaction();
-
         try{
-            // Delete category entity
+            DB::beginTransaction();
+
+            $category = $this->categoryRepository->find($id);
+            if(!$category instanceof Category){
+                throw new Exception("Unable to find category with ID: {$id} !");
+            }
+
             $deleted = $this->categoryRepository->delete($category);
+            DB::commit();
+
+            return $deleted;
         }catch(Exception $ex){
-            // Rollback if something going wrong
             DB::rollBack();
-            // Trace error
             Log::error("Unable to delete category ID:{$category->id}, details: {$ex->getMessage()}");
 
-            // Throw exception
             throw new Exception("Unable to delete this category!");
         }
-
-        // Commit DB transaction
-        DB::commit();
-
-        return $deleted ?? false;
-    }
-
-    /**
-     * Delete category by ID
-     *
-     * @param int $ID
-     * @return bool
-     * @throws \Exception
-     */
-    public function deleteByID(int $ID)
-    {
-        // Start DB transaction
-        DB::beginTransaction();
-
-        try{
-            // Find category
-            $category = $this->categoryRepository->find($ID);
-            if(!$category || is_null($category))
-                throw new Exception("Unable to find category with ID: {$ID} !");
-
-            // Delete category entity
-            $deleted = $this->categoryRepository->delete($category);
-        }catch(Exception $ex){
-            // Rollback if something going wrong
-            DB::rollBack();
-            // Trace error
-            Log::error("Unable to delete category ID:{$category->id}, details: {$ex->getMessage()}");
-
-            // Throw exception
-            throw new Exception("Unable to delete this category!");
-        }
-
-        // Commit DB transaction
-        DB::commit();
-
-        return $deleted ?? false;
     }
 }

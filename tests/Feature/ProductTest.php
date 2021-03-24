@@ -15,7 +15,7 @@ class ProductTest extends TestCase
      */
     public function test_create_product()
     {
-        $response = $this->post('/api/v1/products', [
+        $response = $this->post(route('api.product.fetch'), [
             'name'          =>  'Test product ' . uniqid(),
             'description'   =>  Str::random(25),
             'price'         =>  10.1,
