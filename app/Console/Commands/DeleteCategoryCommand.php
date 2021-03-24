@@ -52,22 +52,12 @@ class DeleteCategoryCommand extends Command
     public function handle()
     {
         try{
-            // Show list of categories
             $this->listCategories();
-            // Ask for category ID need to delete
             $categoryID = $this->getCategoryID();
-            // Delete product
-            if($this->categoryService->deleteByID($categoryID)){
-                $this->info('Category deleted successfully.');
-
-                // Show list of categories
-                $this->listCategories();
-            }else{
-                $this->error('Unable to delete this category!');
-            }
-                
+            $this->categoryService->delete($categoryID);
+            $this->info('Category deleted successfully.');
+            $this->listCategories();
         }catch(Exception $ex){
-            // Trace error
             Log::error("Unable delete a category, details: {$ex->getMessage()}");
 
             $this->error($ex->getMessage());
@@ -101,7 +91,6 @@ class DeleteCategoryCommand extends Command
         $headers = ['ID', 'Name'];
         
         $this->info('List of all categories: ');
-        // Show categories on table
-        $this->table($headers, $this->categoryService->list());
+        $this->table($headers, $this->categoryService->all()->only(['id', 'name']));
     }
 }

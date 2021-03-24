@@ -52,17 +52,11 @@ class CreateCategoryCommand extends Command
     public function handle()
     {
         try{
-            // Display list of exists categories
             $this->listCategories();
-            // Ask for category data
             $data = $this->getCategoryData();
-            // Create new category
             $createdCategory = $this->categoryService->create($data);
-            // Display created category
-            if($createdCategory !== false)
-                $this->displayCategory($createdCategory);
+            $this->displayCategory($createdCategory);
         }catch(Exception $ex){
-            // Trace error
             Log::error("Unable create a new category, details: {$ex->getMessage()}");
 
             $this->error('Unable create a new category!');
@@ -100,7 +94,6 @@ class CreateCategoryCommand extends Command
         ];
         
         $this->info('Category created successfully.');
-        // Show category on table
         $this->table($headers, [$data]);
     }
 
@@ -115,7 +108,6 @@ class CreateCategoryCommand extends Command
         $headers = ['ID', 'Name'];
         
         $this->info('List of all categories: ');
-        // Show categories on table
-        $this->table($headers, $this->categoryService->list());
+        $this->table($headers, $this->categoryService->all()->only(['id', 'name']));
     }
 }

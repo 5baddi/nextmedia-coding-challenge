@@ -52,15 +52,10 @@ class CreateProductCommand extends Command
     public function handle()
     {
         try{
-            // Ask for product data
             $data = $this->getProductData();
-            // Create new product
             $createdProduct = $this->productService->create($data);
-            // Display created product
-            if($createdProduct !== false)
-                $this->displayProduct($createdProduct);
+            $this->displayProduct($createdProduct);
         }catch(Exception $ex){
-            // Trace error
             Log::error("Unable create a new product, details: {$ex->getMessage()}");
 
             $this->error('Unable create a new product!');
@@ -101,7 +96,6 @@ class CreateProductCommand extends Command
         ];
         
         $this->info('Product created successfully.');
-        // Show product on table
         $this->table($headers, [$data]);
     }
 }

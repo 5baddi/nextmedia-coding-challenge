@@ -52,22 +52,12 @@ class DeleteProductCommand extends Command
     public function handle()
     {
         try{
-            // Show list of products
             $this->listProducts();
-            // Ask for product ID need to delete
             $productID = $this->getProductID();
-            // Delete product
-            if($this->productService->deleteByID($productID)){
-                $this->info('Product deleted successfully.');
-
-                // Show list of products
-                $this->listProducts();
-            }else{
-                $this->error('Unable to delete this product!');
-            }
-                
+            $this->productService->delete($productID);
+            $this->info('Product deleted successfully.');
+            $this->listProducts();
         }catch(Exception $ex){
-            // Trace error
             Log::error("Unable delete a product, details: {$ex->getMessage()}");
 
             $this->error($ex->getMessage());
@@ -101,7 +91,6 @@ class DeleteProductCommand extends Command
         $headers = ['ID', 'Name', 'Price'];
         
         $this->info('List of all products: ');
-        // Show products on table
-        $this->table($headers, $this->productService->list());
+        $this->table($headers, $this->productService->all()->only(['id', 'name', 'price']));
     }
 }
