@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use App\Services\CategoryService;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -33,7 +32,7 @@ class CategoryController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
-     * @throws \InvalidArgumentException|\Exception
+     * @throws \ValidationException|\Exception
      */
     public function store(Request $request)
     {
@@ -44,20 +43,24 @@ class CategoryController extends Controller
         ]);
 
         try{
-            // Save new category
             $createdCategory = $this->categoryService->create($data);
 
-            return response()->success("Category created successfully.", $createdCategory, Response::HTTP_CREATED);
-        }catch(InvalidArgumentException $ex){
-            return response()->error(
-                "Something going wrong! can't create new category",
-                [$ex->getMessage()],
-                422
+            return response()->json($createdCategory);
+        }catch(ValidationException $ex){
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new category',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }catch(Exception $ex){
-            return response()->error(
-                "Something going wrong! can't create new category",
-                [$ex->getMessage()]
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new category',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -74,11 +77,14 @@ class CategoryController extends Controller
         try{
             $this->categoryService->delete($id);
 
-            return response()->success("Category deleted successfully.", null, Response::HTTP_NO_CONTENT);
+            return response()->json([], Response::HTTP_NO_CONTENT);
         }catch(Exception $ex){
-            return response()->error(
-                "Something going wrong! can't delete the category",
-                [$ex->getMessage()]
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new category',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
