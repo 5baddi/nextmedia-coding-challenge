@@ -4,18 +4,15 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Product;
-use App\Traits\UploadTrait;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Validator;
 use App\Repositories\ProductsRepository;
+use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
-    use UploadTrait;
-
     /**
      * Product repository
      *
@@ -29,16 +26,24 @@ class ProductService
      * @var \Illuminate\Validation\Validator
      */
     protected $validator;
+    
+    /**
+     * Storage service
+     *
+     * @var \App\Services\StorageService
+     */
+    protected $storage;
 
     /**
      * Constructor
      *
      * @param ProductsRepository $productRepository
      */
-    public function __construct(ProductsRepository $productRepository, Validator $validator)
+    public function __construct(ProductsRepository $productRepository, Validator $validator, StorageService $storage)
     {
         $this->productRepository = $productRepository;
         $this->validator = $validator;
+        $this->storage = $storage;
     }
 
     /**
@@ -66,7 +71,7 @@ class ProductService
      *
      * @param array $data
      * @return \Illuminate\Database\Eloquent\Model|bool
-     * @throws \InvalidArgumentException
+     * @throws \ValidationException
      */
     public function create(array $data)
     {
@@ -81,7 +86,7 @@ class ProductService
                         ]);
 
         if($validator->fails()){
-            throw new InvalidArgumentException($validator->errors()->all());
+            throw new ValidationException($validator->errors()->all());
         }
 
         $existsProduct = $this->categoryRepository->findByName($data['name']);
@@ -90,12 +95,12 @@ class ProductService
         }
 
         // Upload product image
-        if(isset($data['image']) && is_a($data['image'], \Illuminate\Http\UploadedFile::class)){
+        if(isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile){
             try{
                 // Generate file name
                 $fileName = Str::slug($data['name']) . '_' . time();
                 // Upload image to storage
-                $data['image'] = $this->upload($data['image'], 'uploads/products', $fileName);
+                $data['image'] = $this->storage->upload($data['image'], 'uploads/products', $fileName);
             }catch(Exception $ex){
                 Log::error("Unable to upload product image, details: {$ex->getMessage()}");
     
