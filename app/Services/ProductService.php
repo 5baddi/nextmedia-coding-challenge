@@ -9,8 +9,8 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Validator;
 use App\Repositories\ProductsRepository;
-use Illuminate\Support\Facades\Validator;
 
 class ProductService
 {
@@ -24,13 +24,21 @@ class ProductService
     protected $productRepository;
 
     /**
+     * Validator package
+     *
+     * @var \Illuminate\Validation\Validator
+     */
+    protected $validator;
+
+    /**
      * Constructor
      *
      * @param ProductsRepository $productRepository
      */
-    public function __construct(ProductsRepository $productRepository)
+    public function __construct(ProductsRepository $productRepository, Validator $validator)
     {
         $this->productRepository = $productRepository;
+        $this->validator = $validator;
     }
 
     /**
@@ -63,12 +71,14 @@ class ProductService
     public function create(array $data)
     {
         // Validate data
-        $validator = Validator::make($data, [
-            'name'          =>  'required|max:255',
-            'description'   =>  'nullable|string',
-            'price'         =>  'required|numeric',
-            'image'         =>  'nullable|image|max:2048',
-        ]);
+        $validator = $this->validator
+                        ->setData($data)
+                        ->setRules([
+                            'name'          =>  'required|max:255',
+                            'description'   =>  'nullable|string',
+                            'price'         =>  'required|numeric',
+                            'image'         =>  'nullable|image|max:2048',
+                        ]);
 
         if($validator->fails()){
             throw new InvalidArgumentException($validator->errors()->all());
