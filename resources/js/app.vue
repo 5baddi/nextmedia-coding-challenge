@@ -1,12 +1,10 @@
   
 <template>
     <div>
-        <div style="margin-bottom: 1rem">
-            <select name="categories" @change="fetchByCategory()">
-                <option :value="null" :selected="selectedCategory === null">Select a category</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id" v-model="selectedCategory" :selected="category.id === selectedCategory">{{ category.name }}</option>
-            </select>
-        </div>
+        <select name="categories" @change="fetchByCategory()" style="margin-bottom: 1rem">
+            <option :value="null" :selected="selectedCategory === null">Select a category</option>
+            <option v-for="category in categories" :key="category.id" :value="category.id" v-model="selectedCategory" :selected="category.id === selectedCategory">{{ category.name }}</option>
+        </select>
         <table>
             <thead>
                 <tr>
