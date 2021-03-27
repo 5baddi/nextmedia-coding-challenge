@@ -36,6 +36,28 @@ class ProductController extends Controller
     {
         return response()->json($this->productService->all());
     }
+    
+    /**
+     * Retrieve all products by category
+     * 
+     * @param int $category Category
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function byCategory(int $category)
+    {
+        try{
+            return response()->json($this->productService->byCategory($category));
+        }catch(Exception $ex){
+            return response()->json(
+                [
+                    'message' => 'Something going wrong! can\'t create new category',
+                    'error'   => $ex->getMessage() 
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
 
      /**
      * Store a new product

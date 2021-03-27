@@ -30,7 +30,7 @@ class CategoriesRepository implements RepositoryInterface
     /**
      * Retrieve all rows
      * 
-     * @return Collection
+     * @return \lluminate\Support\Collection
      */
     public function all(): Collection
     {

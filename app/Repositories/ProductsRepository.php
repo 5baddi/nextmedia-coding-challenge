@@ -30,7 +30,7 @@ class ProductsRepository implements RepositoryInterface
     /**
      * Retrieve all rows
      * 
-     * @return Collection
+     * @return \lluminate\Support\Collection
      */
     public function all(): Collection
     {
@@ -58,13 +58,29 @@ class ProductsRepository implements RepositoryInterface
     {
         return $this->model::where('name', $name)->first();
     }
+    
+    /**
+     * Filter by category
+     *
+     * @param int $category Category
+     * @return \lluminate\Support\Collection
+     */
+    public function byCategory(int $category): Collection
+    {
+        $result = $this->model::whereHas('categories', function($query) use($category){
+                            $query->where('category_id', $category);
+                        })
+                        ->get();
+
+        return $result;
+    }
 
     /**
      * Insert new row
      * 
      * @param array $attributes Attributes
      * @return \App\Models\Product
-    */
+     */
     public function create(array $attributes): Product
     {
         return $this->model->create($attributes);
@@ -76,11 +92,11 @@ class ProductsRepository implements RepositoryInterface
      * @param \App\Models\Product $entity Entity
      * @param array $attributes Attributes
      * @return bool
-    */
-   public function update(Model $entity, array $attributes): bool
-   {
-       return $entity->update($attributes);
-   }
+     */
+    public function update(Model $entity, array $attributes): bool
+    {
+        return $entity->update($attributes);
+    }
 
    /**
      * Delete exists row

@@ -31,6 +31,7 @@ Route::prefix('v1')->group(function(){
     // product routes
     Route::prefix('products')->group(function(){
         Route::get('/', [ProductController::class, 'index'])->name('api.product.fetch');
+        Route::get('/{category}', [ProductController::class, 'byCategory'])->where('category', '[0-9]+')->name('api.product.fetchByCategory');
         Route::post('/', [ProductController::class, 'store'])->name('api.product.store');
         Route::delete('/{id}', [ProductController::class, 'destroy'])->where('id', '[0-9]+')->name('api.product.delete');
     });

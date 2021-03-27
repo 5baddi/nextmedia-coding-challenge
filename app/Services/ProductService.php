@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Product;
+use App\Repositories\CategoriesRepository;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,6 +20,13 @@ class ProductService
      * @var \App\Repositories\ProductsRepository
      */
     protected $productRepository;
+
+    /**
+     * Category repository
+     *
+     * @var \App\Repositories\CategoriesRepository
+     */
+    protected $categoryRepository;
 
     /**
      * Validator package
@@ -39,9 +47,10 @@ class ProductService
      *
      * @param ProductsRepository $productRepository
      */
-    public function __construct(ProductsRepository $productRepository, Validator $validator, StorageService $storage)
+    public function __construct(ProductsRepository $productRepository, CategoriesRepository $categoryRepository, Validator $validator, StorageService $storage)
     {
         $this->productRepository = $productRepository;
+        $this->categoryRepository = $categoryRepository;
         $this->validator = $validator;
         $this->storage = $storage;
     }
@@ -57,13 +66,20 @@ class ProductService
     }
     
     /**
-     * Retrieve list of products
+     * Retrieve all products by category
      * 
-     * @return array
+     * @param int $category Category
+     * @return Collection
+     * @throws \Exception
      */
-    public function list()
+    public function byCategory(int $category)
     {
-        return $this->productRepository->all(['id', 'name', 'price'])->toArray();
+        $existsCategory = $this->categoryRepository->find($category);
+        if(!$existsCategory instanceof Product){
+            throw new Exception("Category not exists!");
+        }
+
+        return $this->productRepository->byCategory($category);
     }
 
     /**
@@ -71,7 +87,7 @@ class ProductService
      *
      * @param array $data
      * @return \Illuminate\Database\Eloquent\Model|bool
-     * @throws \ValidationException
+     * @throws \ValidationException|\Exception
      */
     public function create(array $data)
     {
@@ -87,7 +103,7 @@ class ProductService
             throw new ValidationException($validator->errors()->all());
         }
 
-        $existsProduct = $this->categoryRepository->findByName($data['name']);
+        $existsProduct = $this->productRepository->findByName($data['name']);
         if($existsProduct instanceof Product){
             throw new Exception("Product already exists with name {$data['name']}");
         }
