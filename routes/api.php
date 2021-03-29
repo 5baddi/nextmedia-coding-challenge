@@ -24,6 +24,7 @@ use App\Http\Controllers\CategoryController;
 Route::prefix('v1')->group(function(){
     // Category routes
     Route::prefix('categories')->group(function(){
+        Route::get('/', [CategoryController::class, 'index'])->name('api.category.fetch');
         Route::post('/', [CategoryController::class, 'store'])->name('api.category.store');
         Route::delete('/{id}', [CategoryController::class, 'destroy'])->where('id', '[0-9]+')->name('api.category.delete');
     });

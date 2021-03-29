@@ -28,6 +28,16 @@ class CategoryController extends Controller
     }
 
     /**
+     * Retrieve all categories
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return response()->json($this->categoryService->withRelationships());
+    }
+
+    /**
      * Store a new category
      *
      * @param \Illuminate\Http\Request $request

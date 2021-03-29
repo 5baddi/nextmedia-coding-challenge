@@ -35,6 +35,17 @@ class AbstractRepository implements RepositoryInterface
     {
         return $this->model::all();
     }
+    
+    /**
+     * Retrieve all rows with relationships
+     * 
+     * @param array $relationships Relationships
+     * @return \lluminate\Support\Collection
+     */
+    public function with(array $relationships): Collection
+    {
+        return $this->model::with($relationships)->get();
+    }
 
     /**
      * Find row by id key

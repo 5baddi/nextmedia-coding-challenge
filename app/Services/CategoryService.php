@@ -39,6 +39,16 @@ class CategoryService
     }
 
     /**
+     * Retrieve all categories with relationships
+     * 
+     * @return Collection
+     */
+    public function withRelationships()
+    {
+        return $this->categoryRepository->with(['parent']);
+    }
+    
+    /**
      * Retrieve all categories
      * 
      * @return Collection
