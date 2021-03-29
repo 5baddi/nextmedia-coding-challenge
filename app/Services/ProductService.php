@@ -64,6 +64,16 @@ class ProductService
     {
         return $this->productRepository->all();
     }
+
+    /**
+     * Retrieve all products with relationships
+     * 
+     * @return Collection
+     */
+    public function withRelationships()
+    {
+        return $this->productRepository->with(['categories']);
+    }
     
     /**
      * Retrieve all products by category

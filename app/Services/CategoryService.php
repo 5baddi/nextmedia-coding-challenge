@@ -37,16 +37,6 @@ class CategoryService
         $this->categoryRepository = $categoryRepository;
         $this->validator = $validator;
     }
-
-    /**
-     * Retrieve all categories with relationships
-     * 
-     * @return Collection
-     */
-    public function withRelationships()
-    {
-        return $this->categoryRepository->with(['parent']);
-    }
     
     /**
      * Retrieve all categories
@@ -56,6 +46,16 @@ class CategoryService
     public function all()
     {
         return $this->categoryRepository->all();
+    }
+
+    /**
+     * Retrieve all categories with relationships
+     * 
+     * @return Collection
+     */
+    public function withRelationships()
+    {
+        return $this->categoryRepository->with(['parent']);
     }
 
     /**
