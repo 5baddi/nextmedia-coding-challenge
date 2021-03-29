@@ -9,9 +9,6 @@ import App from './app.vue'
 // Set HTTP handler
 Vue.prototype.$http = api
 
-// Register dependencies
-Vue.use(Vuex)
-
 // Init app
 const app = new Vue({
     el: '#app',

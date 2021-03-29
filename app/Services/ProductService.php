@@ -4,12 +4,13 @@ namespace App\Services;
 
 use Exception;
 use App\Models\Product;
-use App\Repositories\CategoriesRepository;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use App\Repositories\ProductsRepository;
+use Illuminate\Support\Facades\Validator;
+use App\Repositories\CategoriesRepository;
 use Illuminate\Validation\ValidationException;
 
 class ProductService
@@ -85,7 +86,7 @@ class ProductService
     public function byCategory(int $category)
     {
         $existsCategory = $this->categoryRepository->find($category);
-        if(!$existsCategory instanceof Product){
+        if(!$existsCategory instanceof Category){
             throw new Exception("Category not exists!");
         }
 

@@ -1,9 +1,9 @@
   
 <template>
     <div>
-        <select name="categories" @change="fetchByCategory()" style="margin-bottom: 1rem">
+        <select name="categories" v-model="selectedCategory" @change="fetchByCategory()" style="margin-bottom: 1rem">
             <option :value="null" :selected="selectedCategory === null">Select a category</option>
-            <option v-for="category in categories" :key="category.id" :value="category.id" v-model="selectedCategory" :selected="category.id === selectedCategory">{{ category.name }}</option>
+            <option v-for="category in categories" :key="category.id" :value="category.id" :selected="category.id === selectedCategory">{{ category.name }}</option>
         </select>
         <table>
             <thead>
@@ -21,6 +21,9 @@
                     <td>{{ product.description }}</td>
                     <td>{{ product.price }}</td>
                 </tr>
+                <tr v-if="!products || products.length == 0">
+                    <td colspan="4">No data!</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -30,11 +33,23 @@
 export default {
   name: 'App',
   computed: {
+      categories(){
+          return this.$store.state.categories
+      },
       products(){
           return this.$store.state.products
       }
   },
   methods: {
+      fetchCategories(){
+          this.$http.get('v1/categories')
+            .then(response => {
+                this.$store.commit('setCategories', response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+      },
       fetchProducts(){
           this.$http.get('v1/products')
             .then(response => {
@@ -68,7 +83,7 @@ export default {
       },
       fetchByCategory(){
           if(this.selectedCategory !== null){
-              this.$http.get(`v1/products/${this.selectedCategory}`)
+              this.$http.get(`v1/products/category/${this.selectedCategory}`)
                 .then(response => {
                     this.$store.commit('setProducts', response.data)
                 })
@@ -79,6 +94,10 @@ export default {
       }
     },
     mounted(){
+        if(typeof this.categories === "undefined" || this.categories === null || Object.values(this.categories).length === 0){
+            this.fetchCategories()
+        }
+        
         if(typeof this.products === "undefined" || this.products === null || Object.values(this.products).length === 0){
             this.fetchProducts()
         }

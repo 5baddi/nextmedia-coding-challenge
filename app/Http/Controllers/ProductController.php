@@ -51,7 +51,7 @@ class ProductController extends Controller
         }catch(Exception $ex){
             return response()->json(
                 [
-                    'message' => 'Something going wrong! can\'t create new category',
+                    'message' => 'Something going wrong! can\'t fetching by category',
                     'error'   => $ex->getMessage() 
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
