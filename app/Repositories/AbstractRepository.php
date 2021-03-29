@@ -5,6 +5,7 @@ namespace App\Repositories;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Interfaces\RepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 class AbstractRepository implements RepositoryInterface
 {
@@ -50,9 +51,9 @@ class AbstractRepository implements RepositoryInterface
     * Where closure
     *
     * @param array $conditions Conditions
-    * @return \Illuminate\Database\Eloquent\Model|null
+    * @return \Illuminate\Database\Eloquent\Builder|null
     */
-    public function where(array $conditions): ?Model
+    public function where(array $conditions): ?Builder
     {
         return $this->model::where($conditions);
     }

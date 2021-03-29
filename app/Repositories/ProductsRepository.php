@@ -36,7 +36,7 @@ class ProductsRepository extends AbstractRepository
     public function findByName(string $name): ?Product
     {
         $product = $this->where(['name' => $name]);
-        if($product instanceof \Illuminate\Database\Query\Builder){
+        if($product instanceof \Illuminate\Database\Eloquent\Builder){
             return $product->first();
         }
 

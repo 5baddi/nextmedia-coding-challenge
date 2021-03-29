@@ -34,7 +34,7 @@ class CategoriesRepository extends AbstractRepository
     public function findByName(string $name): ?Category
     {
         $category = $this->where(['name' => $name]);
-        if($category instanceof \Illuminate\Database\Query\Builder){
+        if($category instanceof \Illuminate\Database\Eloquent\Builder){
             return $category->first();
         }
 
