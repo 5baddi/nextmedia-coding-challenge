@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use Illuminate\Support\Collection;
-use App\Interfaces\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use App\Repositories\AbstractRepository;
 
-class ProductsRepository implements RepositoryInterface
+class ProductsRepository extends AbstractRepository
 {
     /**
      * Model
@@ -28,35 +28,19 @@ class ProductsRepository implements RepositoryInterface
     }
 
     /**
-     * Retrieve all rows
-     * 
-     * @return \lluminate\Support\Collection
+     * Find row by name key
+     *
+     * @param string $name Name
+     * @return \App\Models\Product|null
      */
-    public function all(): Collection
-    {
-        return $this->model::all();
-    }
-
-   /**
-    * Find row by id key
-    *
-    * @param int $id Id
-    * @return \App\Models\Product|null
-    */
-    public function find(int $id): ?Product
-    {
-        return $this->model::find($id);
-    }
-
-    /**
-    * Find row by name key
-    *
-    * @param string $name Name
-    * @return \App\Models\Product|null
-    */
     public function findByName(string $name): ?Product
     {
-        return $this->model::where('name', $name)->first();
+        $product = $this->where(['name' => $name]);
+        if($product instanceof \Illuminate\Database\Query\Builder){
+            return $product->first();
+        }
+
+        return null;
     }
     
     /**
@@ -73,39 +57,5 @@ class ProductsRepository implements RepositoryInterface
                         ->get();
 
         return $result;
-    }
-
-    /**
-     * Insert new row
-     * 
-     * @param array $attributes Attributes
-     * @return \App\Models\Product
-     */
-    public function create(array $attributes): Product
-    {
-        return $this->model->create($attributes);
-    }
-
-    /**
-     * Update exists row
-     * 
-     * @param \App\Models\Product $entity Entity
-     * @param array $attributes Attributes
-     * @return bool
-     */
-    public function update(Model $entity, array $attributes): bool
-    {
-        return $entity->update($attributes);
-    }
-
-   /**
-     * Delete exists row
-     * 
-     * @param \App\Models\Product $entity Entity
-     * @return bool|null
-    */
-    public function delete(Model $entity): ?bool
-    {
-        return $entity->delete();
     }
 }

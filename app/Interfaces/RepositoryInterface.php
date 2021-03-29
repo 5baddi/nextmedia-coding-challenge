@@ -28,6 +28,14 @@ interface RepositoryInterface
     public function find(int $id): ?Model;
 
     /**
+    * Where closure
+    *
+    * @param array $conditions Conditions
+    * @return \Illuminate\Database\Eloquent\Model|null
+    */
+    public function where(array $conditions): ?Model;
+
+    /**
      * Insert new row
      * 
      * @param array $attributes Attributes
