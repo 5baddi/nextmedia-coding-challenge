@@ -18,7 +18,7 @@ class ProductTest extends TestCase
         $response = $this->post(route('api.product.fetch'), [
             'name'          =>  'Test product ' . uniqid(),
             'description'   =>  Str::random(25),
-            'price'         =>  10.1,
+            'price'         =>  \random_int(1, 100),
             
         ]);
 
