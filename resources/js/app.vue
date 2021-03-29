@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 <tr v-for="product in products" :key="product.id">
-                    <td><img :src="product.image" alt="Product thumbnail"/></td>
+                    <td><img v-if="product.image" :src="product.image" alt="Product thumbnail"/></td>
                     <td>{{ product.name }}</td>
                     <td>{{ product.description }}</td>
                     <td>{{ product.price }}</td>
