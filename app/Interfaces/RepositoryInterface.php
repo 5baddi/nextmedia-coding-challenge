@@ -21,6 +21,14 @@ interface RepositoryInterface
     public function all(): Collection;
 
     /**
+     * Retrieve all rows with relationships
+     * 
+     * @param array $relationships Relationships
+     * @return \lluminate\Support\Collection
+     */
+    public function with(array $relationships): Collection;
+
+    /**
      * Find row by key
      * 
      * @param int $id Id
